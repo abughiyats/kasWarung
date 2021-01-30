@@ -42,10 +42,14 @@
               <div class="card-body">
                 <form method="POST">
 
-                  <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" type="email" class="form-control" name="email">
-                    <div class="invalid-feedback">
+                  <div class="row">
+                    <div class="form-group col-6">
+                      <label for="username">Username</label>
+                      <input id="text" type="username" class="form-control" name="username">
+                    </div>
+                    <div class="form-group col-6">
+                      <label for="email">Email</label>
+                      <input id="email" type="email" class="form-control" name="email">
                     </div>
                   </div>
 
@@ -61,46 +65,6 @@
                     <div class="form-group col-6">
                       <label for="password2" class="d-block">Password Confirmation</label>
                       <input id="password2" type="password" class="form-control" name="password-confirm">
-                    </div>
-                  </div>
-
-                  <div class="form-divider">
-                    Your Home
-                  </div>
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label>Country</label>
-                      <select class="form-control selectric">
-                        <option>Indonesia</option>
-                        <option>Palestine</option>
-                        <option>Syria</option>
-                        <option>Malaysia</option>
-                        <option>Thailand</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-6">
-                      <label>Province</label>
-                      <select class="form-control selectric">
-                        <option>West Java</option>
-                        <option>East Java</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label>City</label>
-                      <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group col-6">
-                      <label>Postal Code</label>
-                      <input type="text" class="form-control">
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" name="agree" class="custom-control-input" id="agree">
-                      <label class="custom-control-label" for="agree">I agree with the terms and conditions</label>
                     </div>
                   </div>
 
