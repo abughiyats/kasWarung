@@ -53,7 +53,19 @@
                 <td align="right">{{ number_format($credit, 2, ',', '.') }}</td>
                 <td align="right">
                   <div class="btn-group">
+                    <!-- 
+                      * route name = transaction.edit, akan menghasilkan
+                      * url = transaction/{transaction}/edit
+                      * untuk mengganti nilai dinamis yang add pada url, pakai array di parameter ke dua ['transaction' => {nilai}]
+                      * jika ada lebih dari 1 nilai dinamis tinggal tambahkan nilainya pada array. 
+                     -->
                     <a href="{{ route('transaction.edit',['transaction' => $detail->id]) }}" class="btn btn-primary"><i class="fa fa-edit"></i> | edit</a>
+                    <!-- 
+                      *  route name = trasaction.delete, akan menghasilkan
+                      * url = transaction/{id_transaction}
+                      * method = DELETE
+                      * karena itu pakai form dengan method POST, dan method field berisi delete agar laravel tau route yang di maksud
+                     -->
                     <form action="{{ route('transaction.destroy', ['transaction' => $detail->id]) }}" method="POST">
                       {{ csrf_field() }}
                       {{ method_field('DELETE') }}

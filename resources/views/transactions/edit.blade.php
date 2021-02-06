@@ -29,6 +29,13 @@
           <h4 class="card-title">Form Edit Transaksi</h4>
         </div>
         <div class="card-body">
+          <!-- 
+          * route name = transaction.update, akan menghasilkan
+          * url = transaction/{transaction} DENGAN method PUT / PATCH (2 method ini biasa digunakan buat edit, gk ngerti apa bedanya)
+          * untuk mengganti nilai dinamis yang add pada url, pakai array di parameter ke dua ['transaction' => {nilai}]
+          * jika ada lebih dari 1 nilai dinamis tinggal tambahkan nilainya pada array.
+          * tambahan method_field('PUT') / bisa juga method_field('PATCH') agar sesuai dengan yang ada di route.  
+          -->
           <form action="{{ route('transaction.update', ['transaction'=>$transactionDetail->id]) }}" method="POST" class="form-horizontal" id="form-transaction">
             {{ csrf_field() }}
             {{ method_field('PUT') }}

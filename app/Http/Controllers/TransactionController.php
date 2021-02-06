@@ -39,6 +39,10 @@ class TransactionController extends Controller
      */
     public function store(TransactionRequest $request)
     {
+        /**
+         * rule dari validasi ada di App\Http\Requests\TransactionRequest
+         * gunakan perintah php artisan make:request untuk membuat validasinya
+         */
         $request->validated();
         
         // cek apakah sudah ada header hari ini
@@ -92,6 +96,10 @@ class TransactionController extends Controller
      */
     public function update(TransactionRequest $request, $id)
     {
+        /**
+         * rule dari validasi ada di App\Http\Requests\TransactionRequest
+         * gunakan perintah php artisan make:request untuk membuat validasinya
+         */
         $request->validated();
             
         $transactionDetail = TransactionDetail::findOrFail($id);
@@ -112,6 +120,12 @@ class TransactionController extends Controller
         return redirect()->back()->with('success-message', "berhasil merubah detail transaksi");
     }
     
+    /**
+     * this function for create Transaction Model
+     * @param string $date => d-m-Y
+     * 
+     * @return Transaction
+     */
     private function createHeaderTransaction($date)
     {
 
