@@ -22,6 +22,12 @@
           <h4 class="card-title">Details</h4>
         </div>
         <div class="card-body">
+          @if (session('success-message'))
+            <div class="alert alert-success alert-block">
+              <button type="button" class="close" data-dismiss="alert">×</button>	
+              <strong>{{ session('success-message') }}</strong>
+            </div>
+          @endif
           <table class="table table-striped table-borderd">
             <thead>
               <tr>
@@ -47,8 +53,12 @@
                 <td align="right">{{ number_format($credit, 2, ',', '.') }}</td>
                 <td align="right">
                   <div class="btn-group">
-                    <a href="#" class="btn btn-primary"><i class="fa fa-edit"></i> | edit</a>
-                    <a href="#" class="btn btn-danger"><i class="fa fa-trash"></i> | hapus</a>
+                    <a href="{{ route('transaction.edit',['transaction' => $detail->id]) }}" class="btn btn-primary"><i class="fa fa-edit"></i> | edit</a>
+                    <form action="{{ route('transaction.destroy', ['transaction' => $detail->id]) }}" method="POST">
+                      {{ csrf_field() }}
+                      {{ method_field('DELETE') }}
+                      <button type="submit" onclick="confirm('Yakin nih mau di hapus?')" class="btn btn-danger"><i class="fa fa-trash"></i> | hapus</button>
+                    </form>
                   </div>
                 </td>
               </tr>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 class TransactionController extends Controller
@@ -37,23 +37,14 @@ class TransactionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TransactionRequest $request)
     {
-        $request->validate([
-            'date' => 'date|date_format:d-m-Y|required',
-            'type' => ['required', Rule::in(['credit', 'debit'])],
-            'note' => 'required',
-            'amount' => 'required|min:0'
-        ]);
+        $request->validated();
         
         // cek apakah sudah ada header hari ini
         $transaction = Transaction::where('date', date("Y-m-d", strtotime($request->get('date'))))->first();
         if(!$transaction){
-            // buat transaction
-            $transaction = new Transaction;
-            $transaction->date = date("Y-m-d", strtotime($request->get('date')));
-            $transaction->user_id = 1; // nnti di ganti jadi \Auth::user()->id;
-            $transaction->save();
+            $this->createHeaderTransaction($request->get('date'));
         }
 
         $transactionDetail = new TransactionDetail;
@@ -87,7 +78,9 @@ class TransactionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $transactionDetail = TransactionDetail::with('transaction')->findOrFail($id);
+        
+        return view('transactions.edit', ['transactionDetail' => $transactionDetail]);   
     }
 
     /**
@@ -97,9 +90,38 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TransactionRequest $request, $id)
     {
-        //
+        $request->validated();
+            
+        $transactionDetail = TransactionDetail::findOrFail($id);
+        
+        // cek apakah sudah ada header hari ini
+        $transaction = Transaction::where('date', date("Y-m-d", strtotime($request->get('date'))))->first();
+
+        if(!$transaction){
+            $this->createHeaderTransaction($request->get('date'));
+        }
+
+        $transactionDetail->transaction_id = $transaction->id;
+        $transactionDetail->info = $request->get('note');
+        $transactionDetail->type = $request->get('type');
+        $transactionDetail->nominal = $request->get('amount');
+        $transactionDetail->save();
+
+        return redirect()->back()->with('success-message', "berhasil merubah detail transaksi");
+    }
+    
+    private function createHeaderTransaction($date)
+    {
+
+        $transaction = new Transaction;
+        $transaction->date = date("Y-m-d", strtotime($request->get('date')));
+        $transaction->user_id = 1; // nnti di ganti jadi \Auth::user()->id;
+        $transaction->save();
+
+        return $transaction;
+
     }
 
     /**
@@ -110,6 +132,9 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $transactionDetail = TransactionDetail::findOrFail($id);
+        $transactionDetail->delete();
+
+        return redirect()->back()->with('success-message', "berhasil menghapus detail transaksi");
     }
 }
