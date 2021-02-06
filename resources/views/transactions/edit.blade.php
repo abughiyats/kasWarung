@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title') Tambah Transaksi @endsection
+@section('title') Edit Transaksi @endsection
 
 @section('css-library')
 <link rel="stylesheet" href="{{ asset('stisla/modules/bootstrap-daterangepicker/daterangepicker.css') }}">
@@ -13,7 +13,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-    <h1>Tambah Transaksi</h1>
+    <h1>Edit Transaksi</h1>
     </div>
 
     <div class="section-body">
@@ -26,16 +26,17 @@
       <!-- card form input -->
       <div class="card card-primary">
         <div class="card-header">
-          <h4 class="card-title">Form Tambah Transaksi</h4>
+          <h4 class="card-title">Form Edit Transaksi</h4>
         </div>
         <div class="card-body">
-          <form action="{{ route('transaction.store') }}" method="POST" class="form-horizontal" id="form-transaction">
+          <form action="{{ route('transaction.update', ['transaction'=>$transactionDetail->id]) }}" method="POST" class="form-horizontal" id="form-transaction">
             {{ csrf_field() }}
+            {{ method_field('PUT') }}
             <!-- date picker -->
             <div class="form-group row">
               <label for="tanggal" class="col-md-3">Tanggal</label>
               <div class="col-md-7">
-                <input type="text" class="form-control singledate-picker" name="date" value="{{ (session('success-message')) ? session('date') : date('d-m-Y') }}">
+                <input type="text" class="form-control singledate-picker" name="date" value="{{ date('d-m-Y', strtotime($transactionDetail->transaction->date)) }}">
               </div>
               @error('date')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -47,8 +48,8 @@
               <label for="type" class="col-md-3">Tipe</label>
               <div class="col-md-7">
                 <select name="type" id="type" class="form-control">
-                  <option value="credit">Kredit</option>
-                  <option value="debit">Debit</option>
+                  <option value="credit" {{ ($transactionDetail->type == 'credit') ? 'selected  ' : '' }}>Kredit</option>
+                  <option value="debit" {{ ($transactionDetail->type == 'debit') ? 'selected' : '' }}>Debit</option>
                 </select>
               </div>
               @error('type')
@@ -60,7 +61,7 @@
             <div class="form-group row">
               <label for="nominal" class="col-md-3">nominal</label>
               <div class="col-md-7">
-                <input type="number" class="form-control" name="amount" value=0 autocomplete="off">
+                <input type="number" class="form-control" name="amount" value="{{ $transactionDetail->nominal }}" autocomplete="off" >
               </div>
               @error('amount')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -71,7 +72,7 @@
             <div class="form-group row">
               <label for="note" class="col-md-3">Keterangan</label>
               <div class="col-md-7">
-                <textarea name="note" id="note" cols="30" rows="10" class="form-control"></textarea>
+                <textarea name="note" id="note" cols="30" rows="10" class="form-control">{{ $transactionDetail->info }}</textarea>
               </div>
               @error('note')
                 <div class="alert alert-danger">{{ $message }}</div>
